@@ -1,4 +1,5 @@
 using Api.Models;
+using Api.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,6 +19,9 @@ builder.Services.AddDbContext<DatabaseContext>(options =>
 {
     options.UseSqlServer("Server=.;Database=ShopManagement;Trusted_Connection=True;");
 });
+
+// rejestruje tutaj service które potem "wstrzykiwany" jest w konstruktorze kontrollera (wszystkim tym zajmuje sie asp.net framework)
+builder.Services.AddTransient<UserService>();
 
 var app = builder.Build();
 

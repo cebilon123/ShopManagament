@@ -1,7 +1,10 @@
-﻿namespace Api.Models
+﻿using System.Text.Json.Serialization;
+
+namespace Api.Models
 {
     public class Address
     {
+        [JsonIgnore]
         public int Id { get; set; }
         public string Street { get; set; }
         public string Number { get; set; }
