@@ -1,4 +1,4 @@
-namespace Api;
+using System;
 
 public class WeatherForecast
 {
