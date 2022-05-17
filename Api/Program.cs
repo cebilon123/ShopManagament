@@ -22,6 +22,7 @@ builder.Services.AddDbContext<DatabaseContext>(options =>
 
 // rejestruje tutaj service które potem "wstrzykiwany" jest w konstruktorze kontrollera (wszystkim tym zajmuje sie asp.net framework)
 builder.Services.AddTransient<UserService>();
+builder.Services.AddTransient<ProductService>();
 
 var app = builder.Build();
 
