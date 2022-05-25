@@ -46,7 +46,7 @@ namespace Api.Services
         public ICollection<Result.Product> GetAllProducts()
         {
             return _context.Products
-                .Select(product => Result.Product.FromModel(product))// ten select tutaj mapuje tabele produkt na nasz result model produkt
+                .Select(product => Result.Product.FromDatabase(product))// ten select tutaj mapuje tabele produkt na nasz result model produkt
                 .ToList(); // tutaj po prostu tą kolekcję mapujemy znów do listy która implementuje interfejs ICollection<Result.Product> (kompilator inaczej wyrzuca błąd)
         }
 
@@ -60,7 +60,7 @@ namespace Api.Services
             var product = _context.Products.FirstOrDefault(product => product.Id == id); // to jest SELECT * FROM PRODUCTS WHERE products.Id = id
             
             // czy produkt jest null? Tak: zwróć null : Nie: zwróc ten produkt zmapowany
-            return product is null ? null : Result.Product.FromModel(product);
+            return product is null ? null : Result.Product.FromDatabase(product);
         }
 
         /// <summary>
