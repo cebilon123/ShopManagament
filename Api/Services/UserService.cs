@@ -28,6 +28,9 @@ namespace Api.Services
             if (user != null)
                 return false;
 
+            if (user.PrimaryAddress is null)
+                return false;
+
             user = new User()
             {
                 Email = command.Email,

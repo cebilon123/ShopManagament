@@ -24,6 +24,7 @@ builder.Services.AddDbContext<DatabaseContext>(options =>
 builder.Services.AddTransient<UserService>();
 builder.Services.AddTransient<ProductService>();
 builder.Services.AddTransient<OrderService>();
+builder.Services.AddTransient<InvoiceService>();
 
 var app = builder.Build();
 
