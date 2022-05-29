@@ -9,15 +9,13 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-
-
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<DatabaseContext>(options =>
 {
-    options.UseSqlServer("Server=.;Database=ShopManagement;Trusted_Connection=True;");
+    options.UseSqlServer(builder.Configuration["connection"]);
 });
 
 // rejestruje tutaj service które potem "wstrzykiwany" jest w konstruktorze kontrollera (wszystkim tym zajmuje sie asp.net framework)
@@ -29,11 +27,13 @@ builder.Services.AddTransient<InvoiceService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+// if (app.Environment.IsDevelopment())
+// {
+//     
+// }
+
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 
