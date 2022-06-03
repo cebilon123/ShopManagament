@@ -130,5 +130,40 @@ namespace Api.Services
             
             return result;
         }
+
+        public void MarkAsPaid(int orderId, string paymentMethod)
+        {
+            var order = _context.Orders.FirstOrDefault(o => o.Id == orderId);
+
+            if (order is null)
+                return;
+
+            order.PaymentMethod = paymentMethod;
+            order.OrderPaymentDate = DateTime.UtcNow;
+
+            _context.Orders.Update(order);
+
+            _context.SaveChanges();
+        }
+        
+        public void MarkAsSend(int orderId)
+        {
+            var order = _context.Orders.FirstOrDefault(o => o.Id == orderId);
+
+            if (order is null)
+                return;
+
+            order.OrderSend = true;
+            order.OrderSendDate = DateTime.UtcNow;
+
+            _context.Orders.Update(order);
+
+            _context.SaveChanges();
+        }
+
+        public void Archive(int orderId)
+        {
+            _context.ArchiveOrder(orderId);
+        }
     }
 }

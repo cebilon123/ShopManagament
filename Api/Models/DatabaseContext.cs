@@ -14,5 +14,11 @@ namespace Api.Models
         public DatabaseContext(DbContextOptions options) : base(options)
         {
         }
+
+        public void ArchiveOrder(int orderId)
+        {
+            Database.ExecuteSqlRaw($"EXEC [dbo].[TempArchiveOrder] @orderId={orderId}");
+            SaveChanges();
+        }
     }
 }

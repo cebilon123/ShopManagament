@@ -25,6 +25,24 @@ namespace Api.Controllers
             return Created($"Orders/{result}", result);
         }
 
+        [HttpPut("{orderId:int}/MarkAsPaid")]
+        public void MarkAsPaid(int orderId, [FromBody]string paymentMethod)
+        {
+            _orderService.MarkAsPaid(orderId, paymentMethod);
+        }
+        
+        [HttpPut("{orderId:int}/MarkAsSend")]
+        public void MarkAsSend(int orderId)
+        {
+            _orderService.MarkAsSend(orderId);
+        }
+        
+        [HttpPut("{orderId:int}/Archive")]
+        public void ArchiveOrder(int orderId)
+        {
+            _orderService.Archive(orderId);
+        }
+
         [HttpGet]
         public List<Order> GetOrders()
         {
