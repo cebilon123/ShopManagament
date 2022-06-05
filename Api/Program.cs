@@ -23,6 +23,7 @@ builder.Services.AddTransient<UserService>();
 builder.Services.AddTransient<ProductService>();
 builder.Services.AddTransient<OrderService>();
 builder.Services.AddTransient<InvoiceService>();
+builder.Services.AddTransient<UploadService>();
 
 var app = builder.Build();
 
