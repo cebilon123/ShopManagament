@@ -24,6 +24,7 @@ builder.Services.AddTransient<ProductService>();
 builder.Services.AddTransient<OrderService>();
 builder.Services.AddTransient<InvoiceService>();
 builder.Services.AddTransient<UploadService>();
+builder.Services.AddTransient<QueryService>();
 
 var app = builder.Build();
 
