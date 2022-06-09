@@ -20,10 +20,6 @@ namespace Api.Services
 
         public int CreateOrder(CreateOrderCommand command)
         {
-            var productsIds = command.Products.Select(p => p.Id);
-            var products = _context.Products.Where(p => productsIds.Any(id => id == p.Id))
-                .ToList();
-
             // zaczynamy transakcje
             _context.Database.BeginTransaction();
 
@@ -36,57 +32,11 @@ namespace Api.Services
                 ShipmentMethod = command.ShipmentMethod,
             };
 
-            var orderedProducts = new List<OrderedProduct>();
-
-            // sprawdzamy czy kazdy produkt moze zostac dodany do zamowienia
-            // min. sprawdzamy czy jego ilosc moze zostac dodana do zamowienia, jesli nie
-            // to dla uproszczenia projektu usuwamy go po prostu z dodawania do bazy
-            float price = 0;
-            float weight = 0;
-            foreach (var product in products)
-            {
-                var productFromCommand = command.Products.FirstOrDefault(p => p.Id == product.Id);
-
-                if (productFromCommand is null || product.Left == 0 || productFromCommand.Amount > product.Left)
-                {
-                    products.Remove(product);
-                    continue;
-                }
-
-                product.Left -= productFromCommand.Amount;
-                price += product.Price * productFromCommand.Amount;
-                weight += product.Weight * productFromCommand.Amount;
-
-                // dodajemy zamówione produkty
-                orderedProducts.Add(new OrderedProduct
-                {
-                    Category = product.Category,
-                    Description = product.Description,
-                    ProductId = product.Id,
-                    Count = productFromCommand.Amount,
-                    Weight = product.Weight,
-                    Name = product.Name,
-                    Price = product.Price,
-                    OrderActive = true,
-                });
-            }
-
-            order.Price = price;
-            order.Weight = weight;
-
             // dodajemy do bazy nowy order oraz zaktualizowane produkty o ilosc do orderow
             _context.Orders.Add(order);
-            _context.Products.UpdateRange(products);
 
             // zapisujemy zmiany (by dodalo id zamowieniu)
             _context.SaveChanges();
-
-            // jeszcze aktualizujemy produkty w zamówieniu
-            orderedProducts.ForEach(p => { p.OrderId = order.Id; });
-
-            // dodajemy ordered procuts, zapisujemy wszystko i commitujemy transakcje
-            _context.OrderedProducts.AddRangeAsync(orderedProducts);
-            _context.SaveChangesAsync();
             _context.Database.CommitTransactionAsync();
 
             return order.Id;
