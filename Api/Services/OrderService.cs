@@ -49,6 +49,7 @@ namespace Api.Services
                 .Include(o => o.User)
                 .Include(o => o.Worker)
                 .AsNoTracking()
+                .OrderByDescending(o => o.OrderDate)
                 .Skip(page * resultsPerPage)
                 .Take(resultsPerPage)
                 .ToList();
