@@ -42,6 +42,15 @@ namespace Api.Controllers
         {
             _orderService.Archive(orderId);
         }
+        
+        [HttpPut("{orderId:int}/Product")]
+        public IActionResult AddProductToOrder(int orderId, [FromBody]AddProductToOrderCommand command)
+        {
+            command.OrderId = orderId;
+            var result = _orderService.AddProductToOrder(command);
+
+            return result ? Ok() : BadRequest("Podany produkt nie istnieje, id zamowienia jest bledne, zamowienie zostalo wyslane, albo podana ilosc produktu jest zbyt duza");
+        }
 
         [HttpGet]
         public List<Order> GetOrders(int page = 0, int resultsPerPage = 15)

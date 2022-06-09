@@ -1,4 +1,5 @@
-﻿using Api.Commands;
+﻿using System.Collections.Generic;
+using Api.Commands;
 using Api.Result;
 using Api.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -32,6 +33,12 @@ namespace Api.Controllers
         {
             var result = _userService.Login(command);
             return result is null ? BadRequest("Podano bledne dane") : Ok(result);
+        }
+
+        [HttpGet]
+        public IEnumerable<User> GetAllUsers(int page = 0, int resultsPerPage = 15)
+        {
+            return _userService.GetAllUsers(page, resultsPerPage);
         }
     }
 }

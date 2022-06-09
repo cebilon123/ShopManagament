@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Api.Commands;
 using Api.Models;
 using Microsoft.EntityFrameworkCore;
@@ -67,6 +68,16 @@ namespace Api.Services
             if (user.Password == command.Password) return Result.User.FromDatabase(user);
             
             return null;
+        }
+
+        public IEnumerable<Result.User> GetAllUsers(int page, int resultsPerPage)
+        {
+            var users = _context.Users.AsNoTracking()
+                .Skip(page * resultsPerPage)
+                .Take(resultsPerPage)
+                .ToList();
+
+            return users.Select(Result.User.FromDatabase);
         }
     }
 }

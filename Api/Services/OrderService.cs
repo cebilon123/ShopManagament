@@ -171,5 +171,39 @@ namespace Api.Services
         {
             _context.ArchiveOrder(orderId);
         }
+
+        public bool AddProductToOrder(AddProductToOrderCommand command)
+        {
+            var order = _context.Orders.AsNoTracking()
+                .FirstOrDefault(o => o.Id == command.OrderId);
+
+            var product = _context.Products
+                .FirstOrDefault(p => p.Id == command.ProductId);
+
+            if (order is null || product is null || product.Left < command.Amount)
+            {
+                return false;
+            }
+
+            var orderedProduct = new OrderedProduct
+            {
+                Category = product.Category,
+                Count = command.Amount,
+                Description = product.Description,
+                Name = product.Name,
+                OrderId = order.Id,
+                Price = product.Price,
+                Weight = product.Weight,
+                OrderActive = true,
+                ProductId = product.Id
+            };
+            product.Left -= command.Amount;
+
+            _context.OrderedProducts.Add(orderedProduct);
+            _context.Products.Update(product);
+            _context.SaveChanges();
+            
+            return true;
+        }
     }
 }
