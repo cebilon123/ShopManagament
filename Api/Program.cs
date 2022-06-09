@@ -26,6 +26,14 @@ builder.Services.AddTransient<InvoiceService>();
 builder.Services.AddTransient<UploadService>();
 builder.Services.AddTransient<QueryService>();
 
+builder.Services.AddCors(o => o.AddPolicy("Policy", builder =>
+{
+    builder.AllowAnyOrigin()
+        .AllowAnyMethod()
+        .AllowAnyHeader()
+        .AllowCredentials();
+}));
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -36,6 +44,8 @@ var app = builder.Build();
 
 app.UseSwagger();
 app.UseSwaggerUI();
+
+app.UseCors("Policy");
 
 app.UseHttpsRedirection();
 
