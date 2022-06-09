@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Api.Commands;
-using Api.Result;
+using Api.Models;
 using Api.Services;
 using Microsoft.AspNetCore.Mvc;
+using Product = Api.Result.Product;
 
 namespace DefaultNamespace
 {
@@ -11,10 +13,12 @@ namespace DefaultNamespace
     public class ProductsController : ControllerBase
     {
         private readonly ProductService _productService;
+        private readonly DatabaseContext _context;
 
-        public ProductsController(ProductService productService)
+        public ProductsController(ProductService productService, DatabaseContext context)
         {
             _productService = productService;
+            _context = context;
         }
 
         /// <summary>
@@ -66,6 +70,12 @@ namespace DefaultNamespace
             var isDeleted = _productService.RemoveProduct(id);
             
             return isDeleted ? Ok() : BadRequest("Najprawdopodobniej nie znaleziono produktu z podanym id");
+        }
+
+        [HttpGet("Categories")]
+        public IEnumerable<string> GetCategories()
+        {
+            return _context.Products.Select(p => p.Category).Distinct();
         }
     }
 }
