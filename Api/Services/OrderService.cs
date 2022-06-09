@@ -92,16 +92,22 @@ namespace Api.Services
             return order.Id;
         }
 
-        public List<Result.Order> GetOrders()
+        public List<Result.Order> GetOrders(int page, int resultsPerPage)
         {
             var result = new List<Result.Order>();
             var orders = _context.Orders
                 .Include(o => o.User)
                 .Include(o => o.Worker)
                 .AsNoTracking()
+                .Skip(page * resultsPerPage)
+                .Take(resultsPerPage)
                 .ToList();
+
+            var ordersIds = orders.Select(o => o.Id).ToList();
+            
             var orderedProducts = _context.OrderedProducts
                 .Include(op => op.Product)
+                .Where(op => ordersIds.Contains(op.OrderId))
                 .AsNoTracking()
                 .ToList();
 

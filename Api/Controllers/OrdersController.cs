@@ -44,9 +44,9 @@ namespace Api.Controllers
         }
 
         [HttpGet]
-        public List<Order> GetOrders()
+        public List<Order> GetOrders(int page = 0, int resultsPerPage = 15)
         {
-            return _orderService.GetOrders();
+            return _orderService.GetOrders(page, resultsPerPage);
         }
     }
 }
