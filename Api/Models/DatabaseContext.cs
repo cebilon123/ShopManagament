@@ -17,7 +17,7 @@ namespace Api.Models
 
         public void ArchiveOrder(int orderId)
         {
-            Database.ExecuteSqlRaw($"EXEC [dbo].[TempArchiveOrder] @orderId={orderId}");
+            Database.ExecuteSqlRaw($"EXEC [dbo].[ArchiveOrder] @orderId={orderId}");
             SaveChanges();
         }
     }
